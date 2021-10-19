@@ -1,7 +1,7 @@
 const Manager = require("../lib/Manager");
 const Engineer = require("../lib/Engineer");
 const Intern = require("../lib/Intern");
-const generateHtml = require("../utils/generateHtml")
+// const generateHtml = require("../utils/generateHtml")
 
 const inquirer = require("inquirer");
 const fs = require("fs");
@@ -12,51 +12,53 @@ const {
     engineerQuestions,
     internQuestions
 } = require("./questions");
-const output = [];
+const team = [];
 
 
 addManager = () => {
-    inquirer.prompt(managerQuestions).then((answers) => {
-        const manager = new Manager(answers);
+    inquirer.prompt(managerQuestions).then(({name, id, email, officeNumber}) => {
+        console.log(name, id, email, officeNumber)
+        const manager = new Manager(name, id, email, officeNumber);
+        team.push(manager)
         buildTeam()
     })
     
 }
 
 buildTeam = () => {
-    inquirer.prompt(teamMenu).then((answers) => {
-        output.push(answers.menuOptions);
-        if (answers.menuOptions === "Intern") {
+    inquirer.prompt(teamMenu).then(({menuOptions}) => {
+        if (menuOptions === "Intern") {
             addIntern()
         }
-        if (answers.menuOptions === "Engineer") {
+        if (menuOptions === "Engineer") {
             addEngineer()
         }
-        if (answers.menuOptions === "No")(
+        if (menuOptions === "No")(
             exitTeam()
         )
     })
 }
 
 addIntern = () => {
-    inquirer.prompt(internQuestions).then((answers) => {
-        const intern = new Intern(answers);
-        output.push(answers.menuOptions);
+    inquirer.prompt(internQuestions).then(({name, id, email, school}) => {
+        const intern = new Intern(name, id, email, school);
+        team.push(intern);
         buildTeam();
     })
 }
 
 addEngineer = () => {
-    inquirer.prompt(engineerQuestions).then((answers) => {
-        const engineer = new Engineer(answers);
-        output.push(answers.menuOptions);
+    inquirer.prompt(engineerQuestions).then(({name, id, email, github}) => {
+        const engineer = new Engineer(name, id, email, github);
+        team.push(engineer);
         buildTeam();
     })
 }
 
 exitTeam = () => {
     console.log("Congratulations! You have finished building your team");
-    // init();
+    console.log(team)
+    // writeToFile
 }
 
 // init = () => {
