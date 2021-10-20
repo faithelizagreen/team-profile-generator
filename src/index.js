@@ -1,7 +1,8 @@
 const Manager = require("../lib/Manager");
 const Engineer = require("../lib/Engineer");
 const Intern = require("../lib/Intern");
-// const generateHtml = require("../utils/generateHtml")
+const Employee = require("../lib/Employee");
+const generateHtml = require("../utils/generateHtml")
 
 const inquirer = require("inquirer");
 const fs = require("fs");
@@ -16,62 +17,71 @@ const team = [];
 
 
 addManager = () => {
-    inquirer.prompt(managerQuestions).then(({name, id, email, officeNumber}) => {
+    inquirer.prompt(managerQuestions).then(({
+        name,
+        id,
+        email,
+        officeNumber
+    }) => {
         console.log(name, id, email, officeNumber)
         const manager = new Manager(name, id, email, officeNumber);
         team.push(manager)
-        buildTeam()
+        addEmployee()
     })
-    
+
 }
 
-buildTeam = () => {
-    inquirer.prompt(teamMenu).then(({menuOptions}) => {
+
+addEmployee = () => {
+    inquirer.prompt(teamMenu).then(({
+        menuOptions
+    }) => {
         if (menuOptions === "Intern") {
             addIntern()
         }
-        if (menuOptions === "Engineer") {
+        else if (menuOptions === "Engineer") {
             addEngineer()
         }
-        if (menuOptions === "No")(
+        else if (menuOptions === "No")(
             exitTeam()
         )
     })
 }
 
 addIntern = () => {
-    inquirer.prompt(internQuestions).then(({name, id, email, school}) => {
+    inquirer.prompt(internQuestions).then(({
+        name,
+        id,
+        email,
+        school
+    }) => {
         const intern = new Intern(name, id, email, school);
         team.push(intern);
-        buildTeam();
+        addEmployee();
     })
 }
 
 addEngineer = () => {
-    inquirer.prompt(engineerQuestions).then(({name, id, email, github}) => {
+    inquirer.prompt(engineerQuestions).then(({
+        name,
+        id,
+        email,
+        github
+    }) => {
         const engineer = new Engineer(name, id, email, github);
         team.push(engineer);
-        buildTeam();
+        addEmployee();
     })
 }
 
 exitTeam = () => {
     console.log("Congratulations! You have finished building your team");
     console.log(team)
-    // writeToFile
+    writeFile('index.html', team)
 }
-
-// init = () => {
-//     inquirer.prompt(questions)
-//         .then((answers) => {
-//             console.log(answers);
-//             writeToFile('index.html', answers)
-//         })
-// }
-
-// writeToFile = (fileName, answers) => {
-//     const filePath = path.join(process.cwd(), fileName)
-//     return fs.writeFileSync(filePath, generateHtml(answers))
-// }
+writeFile = (fileName, team) => {
+    const filePath = path.join(process.cwd(), fileName)
+    fs.writeFileSync(fileName, generateHtml(team))
+}
 
 addManager()
