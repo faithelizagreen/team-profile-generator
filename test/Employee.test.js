@@ -5,7 +5,7 @@ test("Successfully instantiates instance of Employee class", () => {
     expect(typeof(employee)).toBe("object");
 })
 
-test("Successfully set name using constructor arguments", () => {
+test("Successfully set employee info using constructor arguments", () => {
     const name = "Faith"
     const id = "1"
     const email = "faithelizagreen@gmail.com"
